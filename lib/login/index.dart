@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/login/passwordField.dart';
 import 'package:dio/dio.dart';
 
+import '../map/map.screen.dart';
 import '../pokedex/index.dart';
 import '../storage/index.dart';
 import 'emailField.dart';
@@ -32,6 +33,13 @@ void onLogin(BuildContext context) async {
   } catch (e) {
     log('err: $e');
   }
+}
+
+void directToMapsDemo(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const MapScreen()),
+  );
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -103,12 +111,19 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 12),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const <Widget>[
-                      Image(
-                          image: AssetImage('assets/images/icon-facebook.png'),
-                          width: 50,
-                          height: 50),
-                      Image(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Image(
+                            image:
+                                AssetImage('assets/images/icon-facebook.png'),
+                            width: 50,
+                            height: 50),
+                        iconSize: 50,
+                        onPressed: () {
+                          directToMapsDemo(context);
+                        },
+                      ),
+                      const Image(
                           image: AssetImage('assets/images/icon-google.png'),
                           width: 50,
                           height: 50),
