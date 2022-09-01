@@ -18,13 +18,37 @@ class LoginPage extends StatefulWidget {
 
 void onLogin(BuildContext context) async {
   log('onLogin');
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                // The loading indicator
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 15,
+                ),
+                // Some text
+                Text('Loading...')
+              ],
+            ),
+          ),
+        );
+      });
   try {
     Response response = await Dio().post(
         'http://api.beta.radiantgalaxy.io/sdk/v1/auth/login/credential',
         data: {'email': 'chhh@gmail.com', 'password': '123qweA@'});
 
     StorageApp.accessToken = response.data['accessToken'];
-
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
     // ignore: use_build_context_synchronously
     Navigator.push(
       context,
@@ -109,28 +133,38 @@ class _LoginPageState extends State<LoginPage> {
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                 const SizedBox(height: 12),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      IconButton(
-                        icon: const Image(
-                            image:
-                                AssetImage('assets/images/icon-facebook.png'),
-                            width: 50,
-                            height: 50),
-                        iconSize: 50,
-                        onPressed: () {
-                          directToMapsDemo(context);
-                        },
-                      ),
-                      const Image(
-                          image: AssetImage('assets/images/icon-google.png'),
-                          width: 50,
-                          height: 50),
-                    ])
+                const LoginFooter()
               ])),
         )
       ]),
     );
+  }
+}
+
+class LoginFooter extends StatelessWidget {
+  const LoginFooter({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          IconButton(
+            icon: const Image(
+                image: AssetImage('assets/images/icon-facebook.png'),
+                width: 50,
+                height: 50),
+            iconSize: 50,
+            onPressed: () {
+              directToMapsDemo(context);
+            },
+          ),
+          const Image(
+              image: AssetImage('assets/images/icon-google.png'),
+              width: 50,
+              height: 50),
+        ]);
   }
 }
